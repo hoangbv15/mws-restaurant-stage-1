@@ -12,7 +12,7 @@ self.addEventListener('install', function(event) {
       return cache.addAll([
         '/index.html', '/restaurant.html',
         '/js/main.js', 'js/restaurant_info.js', '/js/dbhelper.js',
-        '/css/styles.css',
+        //'/css/styles.css',
         '/data/restaurants.json'
       ]);
     })

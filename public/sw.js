@@ -13,9 +13,7 @@ self.addEventListener('install', function(event) {
         '/index.html', '/restaurant.html',
         '/js/main.js', 'js/restaurant_info.js', '/js/dbhelper.js',
         '/css/styles.css',
-        '/data/restaurants.json',
-        //'imgs/icon.png',
-        //'https://normalize-css.googlecode.com/svn/trunk/normalize.css'
+        '/data/restaurants.json'
       ]);
     })
   );

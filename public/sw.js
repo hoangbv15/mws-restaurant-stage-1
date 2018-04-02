@@ -10,8 +10,8 @@ self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
-        '/index.html',
-        '/js/main.js', '/js/dbhelper.js',
+        '/index.html', '/restaurant.html',
+        '/js/main.js', 'js/restaurant_info.js', '/js/dbhelper.js',
         '/css/styles.css',
         '/data/restaurants.json',
         //'imgs/icon.png',
@@ -41,6 +41,10 @@ self.addEventListener('fetch', function(event) {
   if (requestUrl.origin === location.origin) {
     if (requestUrl.pathname === '/') {
       event.respondWith(caches.match('/index.html'));
+      return;
+    }
+    if (requestUrl.pathname.startsWith('/restaurant.html')) {
+      event.respondWith(caches.match('/restaurant.html'));
       return;
     }
     if (requestUrl.pathname.startsWith('/img/')) {

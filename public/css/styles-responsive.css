@@ -27,32 +27,72 @@
 }
 
 /* Resize the restaurant list items */
-@media screen and (max-width: 620px) {
+@media screen and (max-width: 500px) {
+  body {
+    font-size: 120%;
+  }
   #restaurants-list li {
     max-width: 100%;
     width: 100%;
     min-height: 150px;
     display: flex;
     flex-wrap: wrap;
+    margin: 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background: transparent;
   }
 }
 
-@media screen and (min-width: 621px) and (max-width: 760px) {
+@media screen and (min-width: 501px) and (max-width: 760px) {
   #restaurants-list li {
-    max-width: 200px;
+    max-width: calc(50% - 100px);
     min-height: 250px;
   }
 }
 
 @media screen and (min-width: 761px) {
   #restaurants-list li {
-    min-width: 200px;
+    max-width: calc(100%/3 - 100px);
     min-height: 250px;
+  }
+
+  .inside #maincontent {
+  	display: block;
+  }
+
+  #restaurant-container, #reviews-container {
+    width: 50%;
+  }
+
+  .inside #map-container {
+    height: 87%;
+    position: fixed;
+    top: 80px;
+    width: 50%;
+    right: 0;
+  }
+
+  #breadcrumb {
+    width: calc(50% - 80px);
+  }
+
+  #reviews-list li {
+    background-color: #fff;
+    border: 2px solid #f3f3f3;
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .inside #footer {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
   }
 }
 
 /* Hide the filters and show hamburger nav button */
-@media screen and (max-width: 446px) {
+@media screen and (max-width: 501px) {
   .filter-options {
     position: fixed;
     top: 9999999px;

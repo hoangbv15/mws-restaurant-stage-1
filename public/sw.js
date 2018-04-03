@@ -10,9 +10,9 @@ self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
-        '/index.html', '/restaurant.html',
+        '/index.html', //'/restaurant.html',
         '/js/main.js', 'js/restaurant_info.js', '/js/dbhelper.js',
-        //'/css/styles.css',
+        //'/css/styles.css', '/css/styles-responsive.css',
         '/data/restaurants.json'
       ]);
     })
@@ -38,11 +38,11 @@ self.addEventListener('fetch', function(event) {
   var requestUrl = new URL(event.request.url);
   if (requestUrl.origin === location.origin) {
     if (requestUrl.pathname === '/') {
-      event.respondWith(caches.match('/index.html'));
+      event.respondWith(serveFile('/index.html', event.request));
       return;
     }
     if (requestUrl.pathname.startsWith('/restaurant.html')) {
-      event.respondWith(caches.match('/restaurant.html'));
+      event.respondWith(serveFile('/restaurant.html', event.request));
       return;
     }
     if (requestUrl.pathname.startsWith('/img/')) {
@@ -58,7 +58,22 @@ self.addEventListener('fetch', function(event) {
   );
 });
 
-function servePhoto(request) {
+let serveFile = (filePath, request) => {
+  return new Promise((resolve, reject) => {
+    caches.match(filePath).then(res => {
+      resolve(res);
+    }, err => {
+      fetch(request).then(networkResponse => {
+        cache.put(filePath, networkResponse.clone());
+        resolve(networkResponse);
+      }, networkErr => {
+        reject(networkErr);
+      });
+    })
+  });
+}
+
+let servePhoto = request => {
   var storageUrl = request.url.replace(/-\d+px\.jpg$/, '');
 
   return caches.open(contentImgsCache).then(function(cache) {

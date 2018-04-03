@@ -189,7 +189,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 /**
  * Create restaurant HTML.
  */
-createRestaurantHTML = (restaurant) => {
+createRestaurantHTML = restaurant => {
   const li = document.createElement('li');
 
   const name = document.createElement('h1');
@@ -199,6 +199,7 @@ createRestaurantHTML = (restaurant) => {
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.alt = `Image for ${restaurant.name}`;
   li.append(image);
 
   const neighborhood = document.createElement('p');

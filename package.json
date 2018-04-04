@@ -21,6 +21,7 @@
     "http-server": "^0.11.1"
   },
   "dependencies": {
-    "grunt-responsive-images": "^0.1.6"
+    "grunt-responsive-images": "^0.1.6",
+    "npm": "^5.8.0"
   }
 }

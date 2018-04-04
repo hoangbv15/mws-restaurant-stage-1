@@ -59,17 +59,21 @@ self.addEventListener('fetch', function(event) {
 });
 
 let serveFile = (filePath, request) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(function(resolve, reject) {
     caches.match(filePath).then(res => {
-      resolve(res);
-    }, err => {
-      fetch(request).then(networkResponse => {
-        cache.put(filePath, networkResponse.clone());
-        resolve(networkResponse);
-      }, networkErr => {
-        reject(networkErr);
-      });
-    })
+      if (res) {
+        resolve(res);
+      } else {
+        fetch(request).then(networkResponse => {
+          caches.open(staticCacheName).then(function(cache) {
+            cache.put(filePath, networkResponse.clone());
+            resolve(networkResponse);
+          });
+        }, networkErr => {
+          reject(networkErr);
+        });
+      }
+    });
   });
 }
 

@@ -264,10 +264,9 @@ nav h1 a {
   z-index: 1000;
 }
 .inside #map-container {
-  background: blue none repeat scroll 0 0;
   height: 400px;
   position: relative;
-  top: 80px;
+  padding-top: 100px;
   width: 100%;
 }
 .inside #map {

@@ -28,14 +28,14 @@
           <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
             <option value="all">All Cuisines</option>
           </select>
-        </label> 
+        </label>
       </div>
     </nav>
   </header>
 
-  <main id="maincontent">
-    <section id="map-container" aria-hidden="true">
-      <div id="map"></div>
+  <main role="main" id="maincontent">
+    <section id="map-container">
+      <div id="map" tabindex="0" role="application" aria-label="Map with restaurants"></div>
     </section>
     <section>
       <ul id="restaurants-list"></ul>

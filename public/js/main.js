@@ -195,6 +195,7 @@ createRestaurantHTML = restaurant => {
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
   name.className = 'restaurant-name';
+  name.setAttribute('tabindex', '0');
   li.append(name);
 
   const image = document.createElement('img');
@@ -206,11 +207,13 @@ createRestaurantHTML = restaurant => {
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
   neighborhood.className = 'restaurant-neighborhood';
+  neighborhood.setAttribute('tabindex', '0');
   li.append(neighborhood);
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
   address.className = 'restaurant-address';
+  address.setAttribute('tabindex', '0');
   li.append(address);
 
   const more = document.createElement('a');

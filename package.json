@@ -2,14 +2,25 @@
   "name": "mws-restaurant",
   "version": "0.1.0",
   "description": "",
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
   "scripts": {
     "build-images": "grunt default",
-    "serve": "http-server public -p 8000"
+    "build": "gulp && npm run build-images",
+    "serve": "webpack-dev-server --port 8000",
+    "start": "npm run build && npm run serve"
   },
   "author": "",
   "license": "ISC",
   "private": true,
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "del": "^3.0.0",
     "grunt": "~0.4.5",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "~0.6.0",
@@ -18,7 +29,11 @@
     "grunt-contrib-nodeunit": "~0.4.1",
     "grunt-contrib-uglify": "~0.5.0",
     "grunt-mkdir": "~0.1.2",
-    "http-server": "^0.11.1"
+    "gulp": "^3.9.1",
+    "webpack": "^4.8.2",
+    "webpack-cli": "^2.1.3",
+    "webpack-dev-server": "^3.1.4",
+    "webpack-stream": "^4.0.3"
   },
   "dependencies": {
     "grunt-responsive-images": "^0.1.6",

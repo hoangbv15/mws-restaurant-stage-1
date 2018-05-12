@@ -34,8 +34,8 @@ module.exports = function(grunt) {
         files: [{
           expand: true,
           src: ['*.{gif,jpg,png}'],
-          cwd: 'public/img_src/',
-          dest: 'public/img/'
+          cwd: 'src/img_src/',
+          dest: 'dist/img/'
         }]
       }
     },
@@ -43,7 +43,7 @@ module.exports = function(grunt) {
     /* Clear out the images directory if it exists */
     clean: {
       dev: {
-        src: ['public/img'],
+        src: ['dist/img'],
       },
     },
 
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
     mkdir: {
       dev: {
         options: {
-          create: ['public/img']
+          create: ['dist/img']
         },
       },
     },
@@ -61,8 +61,8 @@ module.exports = function(grunt) {
       dev: {
         files: [{
           expand: true,
-          src: 'public/img_src/fixed/*.{gif,jpg,png}',
-          dest: 'public/img/'
+          src: 'src/img_src/fixed/*.{gif,jpg,png}',
+          dest: 'dist/img/'
         }]
       },
     },

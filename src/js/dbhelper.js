@@ -1,7 +1,13 @@
+import idb from 'idb';
+
+const openIdb = idb.open('udacity-restaurant-store', 1, db => {
+  db.createObjectStore('restaurants', {keyPath: 'id'});
+});
+
 /**
  * Common database helper functions.
  */
-class DBHelper {
+export default class DBHelper {
 
   /**
    * Database URL.
@@ -17,7 +23,20 @@ class DBHelper {
    */
   static finaliseFetch(promise, callback) {
     promise.then(res => res.json())
-      .then(restaurants => callback(null, restaurants))
+      .then(restaurants => {
+        if (restaurants) {
+          openIdb.then(db => {
+            const tx = db.transaction('restaurants', 'readwrite');
+            const store = tx.objectStore('restaurants');
+            restaurants.forEach(r => {
+              if (r && r.id) {
+                store.put(r);
+              }
+            });
+          });
+        }
+        callback(null, restaurants);
+      })
       .catch(err => callback(err, null));
   }
 
@@ -45,7 +64,7 @@ class DBHelper {
     DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) {
         callback(error, null);
-      } else {
+      } else {;
         // Filter restaurants to have only given cuisine type
         const results = restaurants.filter(r => r.cuisine_type == cuisine);
         callback(null, results);

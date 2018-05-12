@@ -1,7 +1,8 @@
 import idb from 'idb';
 
+const IdbName = 'restaurants';
 const openIdb = idb.open('udacity-restaurant-store', 1, db => {
-  db.createObjectStore('restaurants', {keyPath: 'id'});
+  db.createObjectStore(IdbName, {keyPath: 'id'});
 });
 
 /**
@@ -26,8 +27,8 @@ export default class DBHelper {
       .then(res => {
         if (res) {
           openIdb.then(db => {
-            const tx = db.transaction('restaurants', 'readwrite');
-            const store = tx.objectStore('restaurants');
+            const tx = db.transaction(IdbName, 'readwrite');
+            const store = tx.objectStore(IdbName);
             if (res.forEach) {
               res.forEach(r => {
                 if (r && r.id) {
@@ -48,7 +49,20 @@ export default class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    DBHelper.finaliseFetch(fetch(DBHelper.DATABASE_URL), callback);
+    const refresh = () => DBHelper.finaliseFetch(fetch(DBHelper.DATABASE_URL), callback);
+    openIdb.then(db => {
+      db.transaction(IdbName)
+        .objectStore(IdbName)
+        .getAll()
+        .then(res => {
+          console.log(res);
+          if (res) {
+            callback(null, res);
+          }
+          refresh();
+        })
+        .catch(refresh);
+    }).catch(refresh);
   }
 
 
@@ -56,8 +70,22 @@ export default class DBHelper {
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id, callback) {
-    DBHelper.finaliseFetch(
+    const refresh = () => DBHelper.finaliseFetch(
       fetch(DBHelper.DATABASE_URL + `/${id}`), callback);
+    openIdb.then(db => {
+      console.log(Number.isInteger(id));
+      db.transaction(IdbName)
+        .objectStore(IdbName)
+        .get(id)
+        .then(res => {
+          console.log(res);
+          if (res) {
+            callback(null, res);
+          }
+          refresh();
+        })
+        .catch(refresh);
+    }).catch(refresh);
   }
 
   /**

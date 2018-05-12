@@ -10,7 +10,8 @@
   "scripts": {
     "build-images": "grunt default",
     "build": "gulp && npm run build-images",
-    "serve": "webpack-dev-server --port 8000",
+    "build-prod": "gulp build-prod && npm run build-images",
+    "serve": "webpack-dev-server --config webpack.dev.config.js --port 8000",
     "start": "npm run build && npm run serve"
   },
   "author": "",

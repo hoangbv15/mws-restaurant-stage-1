@@ -1,7 +1,8 @@
 const gulp = require('gulp');
 const webpack = require('webpack');
 const gulpWebpack = require('webpack-stream');
-const webpackDevConfig = require('./webpack.config.js');
+const webpackDevConfig = require('./webpack.dev.config.js');
+const webpackProdConfig = require('./webpack.prod.config.js');
 const del = require('del');
 
 const src = 'src';
@@ -39,6 +40,12 @@ gulp.task('webpack', ['clean'], function(){
     .pipe(gulp.dest(paths.dist));
 });
 
+gulp.task('webpack-prod', ['clean'], function(){
+  return gulp.src(`${src}/js/main.js`)
+    .pipe(gulpWebpack(webpackProdConfig, webpack))
+    .pipe(gulp.dest(paths.dist));
+});
+
 gulp.task('watch', function() {
   gulp.watch(paths.html, ['html']);
   gulp.watch(paths.css, ['css']);
@@ -47,3 +54,5 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', [ 'html', 'css', 'sw', 'webpack' ]);
+
+gulp.task('build-prod', [ 'html', 'css', 'sw', 'webpack-prod' ]);

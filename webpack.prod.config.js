@@ -1,7 +1,8 @@
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: {
     main: './src/js/main.js',
     restaurant: './src/js/restaurant_info.js'
@@ -22,8 +23,7 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js']
   },
-  devtool: 'inline-source-map',
-  devServer: {
-    contentBase: './dist'
+  optimization: {
+    minimize: true
   }
 };

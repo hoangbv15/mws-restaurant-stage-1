@@ -11,7 +11,7 @@ self.addEventListener('install', function(event) {
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
         '/index.html', '/restaurant.html',
-        '/bundle.js',
+        //'/main.js', 'restaurant.js',
         '/css/styles.css', '/css/styles-responsive.css'
       ]);
     })

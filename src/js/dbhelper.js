@@ -23,19 +23,23 @@ export default class DBHelper {
    */
   static finaliseFetch(promise, callback) {
     promise.then(res => res.json())
-      .then(restaurants => {
-        if (restaurants) {
+      .then(res => {
+        if (res) {
           openIdb.then(db => {
             const tx = db.transaction('restaurants', 'readwrite');
             const store = tx.objectStore('restaurants');
-            restaurants.forEach(r => {
-              if (r && r.id) {
-                store.put(r);
-              }
-            });
+            if (res.forEach) {
+              res.forEach(r => {
+                if (r && r.id) {
+                  store.put(r);
+                }
+              });
+            } else if (res && res.id) {
+              store.put(res);
+            }
           });
         }
-        callback(null, restaurants);
+        callback(null, res);
       })
       .catch(err => callback(err, null));
   }

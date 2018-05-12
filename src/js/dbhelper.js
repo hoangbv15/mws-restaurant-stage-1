@@ -55,7 +55,6 @@ export default class DBHelper {
         .objectStore(IdbName)
         .getAll()
         .then(res => {
-          console.log(res);
           if (res) {
             callback(null, res);
           }
@@ -65,7 +64,6 @@ export default class DBHelper {
     }).catch(refresh);
   }
 
-
   /**
    * Fetch a restaurant by its ID.
    */
@@ -73,12 +71,10 @@ export default class DBHelper {
     const refresh = () => DBHelper.finaliseFetch(
       fetch(DBHelper.DATABASE_URL + `/${id}`), callback);
     openIdb.then(db => {
-      console.log(Number.isInteger(id));
       db.transaction(IdbName)
         .objectStore(IdbName)
         .get(id)
         .then(res => {
-          console.log(res);
           if (res) {
             callback(null, res);
           }

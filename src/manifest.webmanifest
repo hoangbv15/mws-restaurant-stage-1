@@ -1,0 +1,9 @@
+{
+    "name": "Restaurants Review",
+    "short_name": "Restaurants",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#252831",
+    "theme_color": "#252831",
+    "description": "A simply readable Restaurants Review app."
+}

@@ -12,6 +12,7 @@ const paths = {
   html: `${src}/**/*.html`,
   css: `${src}/**/*.css`,
   js: `${src}/**/*.js`,
+  manifest: `${src}/manifest.webmanifest`,
   dist: 'dist'
 }
 
@@ -34,6 +35,11 @@ gulp.task('sw', ['clean'], function(){
     .pipe(gulp.dest(paths.dist));
 });
 
+gulp.task('manifest', ['clean'], function(){
+  return gulp.src(paths.manifest)
+    .pipe(gulp.dest(paths.dist));
+});
+
 gulp.task('webpack', ['clean'], function(){
   return gulp.src(`${src}/js/main.js`)
     .pipe(gulpWebpack(webpackDevConfig, webpack))
@@ -53,6 +59,6 @@ gulp.task('watch', function() {
   gulp.watch(paths.js, ['webpack']);
 });
 
-gulp.task('default', [ 'html', 'css', 'sw', 'webpack' ]);
+gulp.task('default', [ 'html', 'css', 'sw', 'manifest', 'webpack' ]);
 
-gulp.task('build-prod', [ 'html', 'css', 'sw', 'webpack-prod' ]);
+gulp.task('build-prod', [ 'html', 'css', 'sw', 'manifest', 'webpack-prod' ]);

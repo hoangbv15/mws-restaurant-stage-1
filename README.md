@@ -2,20 +2,35 @@
 ---
 #### _Three Stage Course Material Project - Restaurant Reviews_
 
-## Project Overview: Stage 1
+## Project Overview: Stage 2
 
 ### To build
 
 Install npm dependency packages by running
 
-`npm i && npm run build-images`
+`npm i`
 
-The command `npm run build-images` will turn the original images in `public/img_src` into compressed images optimised for the web in `public/img`
+To build and immediately start a development server, run
 
-Note that if you get image not found errors while running this website, it is likely due to this command not being run successfully before serving.
+`npm run start`
+
+This will create a development build at `./dist` and start a webpack development server on port 8000
+
+To make a production build at `./dist`, run
+
+`npm run build-prod`
 
 ### To serve
 
-Run this command to spin off a http server on port 8000:
+Run this command to spin off a webpack development server on port 8000:
 
-`npm run serve`
+`npm run serve-dev`
+
+Note that this will start webpack in watch mode and will overwrite files in the dist folder, so it cannot be used to serve production build.
+
+To serve a production build in the dist folder, run
+
+`npm run serve-prod`
+
+This will start a lightweight http-server on port 8000
+

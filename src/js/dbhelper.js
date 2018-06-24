@@ -5,20 +5,15 @@ const openIdb = idb.open('udacity-restaurant-store', 1, db => {
   db.createObjectStore(IdbName, {keyPath: 'id'});
 });
 
+const PORT = 1337;
+const BACKEND_URL = `http://localhost:${PORT}`;
+const RESTAURANT_URL = `${BACKEND_URL}/restaurants`;
+const REVIEW_URL = `${BACKEND_URL}/reviews`
+
 /**
  * Common database helper functions.
  */
 export default class DBHelper {
-
-  /**
-   * Database URL.
-   * Change this to restaurants.json file location on your server.
-   */
-  static get DATABASE_URL() {
-    const port = 1337 // Change this to your server port
-    return `http://localhost:${port}/restaurants`;
-  }
-
   /**
    * Chain the fetch promise with proper callback handling
    */
@@ -49,7 +44,7 @@ export default class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    const refresh = () => DBHelper.finaliseFetch(fetch(DBHelper.DATABASE_URL), callback);
+    const refresh = () => DBHelper.finaliseFetch(fetch(RESTAURANT_URL), callback);
     openIdb.then(db => {
       db.transaction(IdbName)
         .objectStore(IdbName)
@@ -69,7 +64,7 @@ export default class DBHelper {
    */
   static fetchRestaurantById(id, callback) {
     const refresh = () => DBHelper.finaliseFetch(
-      fetch(DBHelper.DATABASE_URL + `/${id}`), callback);
+      fetch(RESTAURANT_URL + `/${id}`), callback);
     openIdb.then(db => {
       db.transaction(IdbName)
         .objectStore(IdbName)
@@ -201,4 +196,10 @@ export default class DBHelper {
     return marker;
   }
 
+  /**
+   * Post a restaurant review
+   */
+  static postReview(restaurantId, username, rating, comment) {
+    
+  }
 }

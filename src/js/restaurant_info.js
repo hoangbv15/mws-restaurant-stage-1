@@ -89,6 +89,7 @@ function fillRestaurantHTML(restaurant = self.restaurant){
  */
 function fillRestaurantHoursHTML(operatingHours = self.restaurant.operating_hours){
   const hours = document.getElementById('restaurant-hours');
+  hours.innerHTML = null;
   for (let key in operatingHours) {
     const row = document.createElement('tr');
 
@@ -109,6 +110,7 @@ function fillRestaurantHoursHTML(operatingHours = self.restaurant.operating_hour
  */
 function fillReviewsHTML(reviews = self.restaurant.reviews) {
   const container = document.getElementById('reviews-container');
+  container.innerHTML = null;
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
   container.appendChild(title);

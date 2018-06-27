@@ -9,7 +9,9 @@ let _initMapPromise = new Promise(resolve => { _initMapResolve = resolve; });
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  document.forms['reviewForm'].onsubmit = submitReview;
+  document.forms['reviewForm'].onsubmit = () => {
+    return submitReview();
+  };
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
       console.error(error);
@@ -39,7 +41,24 @@ function submitReview() {
   var name = form['name'].value;
   var rating = form['rating'].value;
   var comment = form['comment'].value;
-  console.log(name + rating + comment);
+
+  DBHelper.postReview(self.restaurant.id, name, rating, comment);
+
+  var review = {
+    name: name,
+    date: new Date().toDateString(),
+    rating: rating,
+    comments: comment
+  };
+
+  if (!Array.isArray(self.restaurant.reviews) || !self.restaurant.reviews.length) {
+    self.restaurant.reviews = [review];
+  } else {
+    self.restaurant.reviews.push(review);
+  }
+
+  fillReviewsHTML();
+
   return false;
 }
 

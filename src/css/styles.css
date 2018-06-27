@@ -136,7 +136,7 @@ nav h1 a {
   padding: 20px;
   width: 100%;
 }
-#reviews-container h2, #review-form label {
+#reviews-container h2 {
   color: #f58500;
   font-size: 1.3em;
   letter-spacing: -1px;
@@ -239,7 +239,7 @@ nav h1 a {
   font-size: 1em;
 	width: 100%;
 }
-.restaurant-more {
+.restaurant-more, .button {
   background-color: #f18200;
   border-bottom: 3px solid #eee;
   color: #fff;
@@ -250,6 +250,10 @@ nav h1 a {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
+}
+
+.button {
+	border: 0;
 }
 
 /* ====================== Restaurant Details ====================== */
@@ -290,4 +294,97 @@ nav h1 a {
 #restaurant-address {
   font-size: 1em;
   margin: 10px 0px;
+}
+
+/* ====================== Restaurant Review Form ====================== */
+
+#review-form .label {
+	overflow: hidden;
+	position: absolute;
+	width: 0;
+	height: 0;
+}
+
+#review-form .text {
+	width: 100%;
+	border-radius: 0.5em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	font-size: 1em;
+	height: 2em;
+}
+
+#review-form .submit {
+	width: 10em;
+	font-size: 1em;
+}
+
+#review-form textarea {
+	width: 100%;
+	border-radius: 0.5em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	font-size: 1em;
+	height: 5em;
+}
+
+#review-form .text:invalid, #review-form textarea:invalid {
+	border-color: red;
+	border-style: solid;
+}
+
+#rating {
+	float: left;
+	border: 0;
+}
+
+/* :not(:checked) is a filter, so that browsers that don’t support :checked don’t
+   follow these rules. Every browser that supports :checked also supports :not(), so
+   it doesn’t make the test unnecessarily selective */
+#rating:not(:checked) > input {
+  position:absolute;
+  clip:rect(0,0,0,0);
+}
+
+#rating:not(:checked) > label {
+  float:right;
+  width:1em;
+  padding:0 .1em;
+  overflow:hidden;
+  white-space:nowrap;
+  cursor:pointer;
+  font-size:200%;
+  line-height:1.2;
+  color:#ddd;
+  /*text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);*/
+}
+
+#rating:not(:checked) > label:before {
+  content: '★ ';
+}
+
+#rating > input:checked ~ label {
+  color: #f70;
+  /*text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);*/
+}
+
+#rating:not(:checked) > label:hover,
+#rating:not(:checked) > label:hover ~ label {
+  color: gold;
+  /*text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);*/
+}
+
+#rating > input:checked + label:hover,
+#rating > input:checked + label:hover ~ label,
+#rating > input:checked ~ label:hover,
+#rating > input:checked ~ label:hover ~ label,
+#rating > label:hover ~ input:checked ~ label {
+  color: #ea0;
+  /*text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);*/
+}
+
+#rating > label:active {
+  position:relative;
+  top:2px;
+  left:2px;
 }

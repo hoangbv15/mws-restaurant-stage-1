@@ -9,6 +9,7 @@ let _initMapPromise = new Promise(resolve => { _initMapResolve = resolve; });
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+  document.forms['reviewForm'].onsubmit = submitReview;
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
       console.error(error);
@@ -31,6 +32,15 @@ window.initMap = () => {
     scrollwheel: false
   });
   _initMapResolve();
+}
+
+function submitReview() {
+  var form = document.forms['reviewForm'];
+  var name = form['name'].value;
+  var rating = form['rating'].value;
+  var comment = form['comment'].value;
+  console.log(name + rating + comment);
+  return false;
 }
 
 /**
@@ -111,17 +121,17 @@ function fillRestaurantHoursHTML(operatingHours = self.restaurant.operating_hour
 function fillReviewsHTML(reviews = self.restaurant.reviews) {
   const container = document.getElementById('reviews-container');
   container.innerHTML = null;
-  const title = document.createElement('h2');
-  title.innerHTML = 'Reviews';
-  container.appendChild(title);
-
+  const header = document.createElement('h2');
+  header.innerHTML = 'Reviews';
+  container.appendChild(header);
   if (!reviews) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
     container.appendChild(noReviews);
     return;
   }
-  const ul = document.getElementById('reviews-list');
+  const ul = document.createElement('reviews-list');
+  ul.className = 'reviews-list';
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
   });

@@ -12,6 +12,7 @@
     "build": "gulp && npm run build-images",
     "build-prod": "gulp build-prod && npm run build-images",
     "serve-dev": "webpack-dev-server --config webpack.dev.config.js --port 8000",
+    "serve-prod-http2": "http2-server dist ---http-port 8000 -p 4443",
     "serve-prod": "http-server dist -p 8000",
     "start": "npm run build && npm run serve-dev"
   },

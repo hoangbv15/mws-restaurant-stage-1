@@ -42,14 +42,14 @@ function submitReview() {
   var rating = form['rating'].value;
   var comment = form['comment'].value;
 
-  DBHelper.postReview(self.restaurant.id, name, rating, comment);
-
   var review = {
     name: name,
-    date: new Date().toDateString(),
+    updatedAt: new Date().getTime(),
     rating: rating,
     comments: comment
   };
+
+  DBHelper.postReview(self.restaurant.id, name, rating, comment);
 
   if (!Array.isArray(self.restaurant.reviews) || !self.restaurant.reviews.length) {
     self.restaurant.reviews = [review];
@@ -75,14 +75,36 @@ function fetchRestaurantFromURL(callback){
     error = 'No restaurant id in URL'
     callback(error, null);
   } else {
-    DBHelper.fetchRestaurantById(parseInt(id), (error, restaurant) => {
-      self.restaurant = restaurant;
+    let resId = parseInt(id);
+    DBHelper.fetchRestaurantById(resId, (error, restaurant) => {
       if (!restaurant) {
         console.error(error);
         return;
       }
+      self.restaurant = restaurant;
+      if (self.reviews) {
+        self.restaurant.reviews = self.reviews;
+      }
+
       fillRestaurantHTML();
       callback(null, restaurant)
+    });
+
+    DBHelper.fetchReviews(resId, (error, reviews) => {
+      if (!reviews) {
+        console.error(error);
+        return;
+      }
+      if (!Array.isArray(reviews)) {
+        reviews = [reviews];
+      }
+
+      if (self.restaurant) {
+        self.restaurant.reviews = reviews;
+      } else {
+        self.reviews = reviews;
+      }
+      fillReviewsHTML();
     });
   }
 }
@@ -172,7 +194,7 @@ function createReviewHTML(review) {
 
   const date = document.createElement('p');
   date.classList.add('review-date');
-  date.innerHTML = review.date;
+  date.innerHTML = new Date(review.updatedAt).toDateString();
   date.setAttribute('tabindex', '0');
   li.appendChild(date);
 

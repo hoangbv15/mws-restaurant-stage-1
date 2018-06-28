@@ -22,7 +22,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
  * Register service worker
  */
 function registerServiceWorker() {
-  if (!navigator.serviceWorker) return;
+  if (!navigator.serviceWorker) {
+    return;
+  }
 
   navigator.serviceWorker.register('/sw.js').then(function(reg) {
     if (!navigator.serviceWorker.controller) {

@@ -8,7 +8,7 @@ const del = require('del');
 const src = 'src';
 
 const paths = {
-  sw: `${src}/sw.js`,
+  workers: `${src}/*.js`,
   html: `${src}/**/*.html`,
   css: `${src}/**/*.css`,
   js: `${src}/**/*.js`,
@@ -30,8 +30,8 @@ gulp.task('css', ['clean'], function(){
     .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('sw', ['clean'], function(){
-  return gulp.src(paths.sw)
+gulp.task('workers', ['clean'], function(){
+  return gulp.src(paths.workers)
     .pipe(gulp.dest(paths.dist));
 });
 
@@ -55,10 +55,10 @@ gulp.task('webpack-prod', ['clean'], function(){
 gulp.task('watch', function() {
   gulp.watch(paths.html, ['html']);
   gulp.watch(paths.css, ['css']);
-  gulp.watch(paths.sw, ['sw']);
+  gulp.watch(paths.workers, ['workers']);
   gulp.watch(paths.js, ['webpack']);
 });
 
-gulp.task('default', [ 'html', 'css', 'sw', 'manifest', 'webpack' ]);
+gulp.task('default', [ 'html', 'css', 'workers', 'manifest', 'webpack' ]);
 
-gulp.task('build-prod', [ 'html', 'css', 'sw', 'manifest', 'webpack-prod' ]);
+gulp.task('build-prod', [ 'html', 'css', 'workers', 'manifest', 'webpack-prod' ]);

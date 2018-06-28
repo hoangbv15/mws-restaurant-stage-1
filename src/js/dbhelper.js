@@ -1,14 +1,30 @@
 import idb from 'idb';
 
-const IdbName = 'restaurants';
-const openIdb = idb.open('udacity-restaurant-store', 1, db => {
-  db.createObjectStore(IdbName, {keyPath: 'id'});
+const ResStoreName = 'restaurants';
+const ReviewStoreName = 'reviews';
+const openResDb = idb.open('udacity-restaurant-store', 1, db => {
+  db.createObjectStore(ResStoreName, {keyPath: 'id'});
+  db.createObjectStore(ReviewStoreName, {keyPath: 'id'});
 });
 
 const PORT = 1337;
 const BACKEND_URL = `http://localhost:${PORT}`;
 const RESTAURANT_URL = `${BACKEND_URL}/restaurants`;
 const REVIEW_URL = `${BACKEND_URL}/reviews`
+
+let _worker;
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  createWebWorker();
+});
+
+function createWebWorker() {
+  if (!window.Worker) {
+    return;
+  }
+
+  _worker = new Worker('/worker.js');
+}
 
 /**
  * Common database helper functions.
@@ -21,9 +37,9 @@ export default class DBHelper {
     promise.then(res => res.json())
       .then(res => {
         if (res) {
-          openIdb.then(db => {
-            const tx = db.transaction(IdbName, 'readwrite');
-            const store = tx.objectStore(IdbName);
+          openResDb.then(db => {
+            const tx = db.transaction(ResStoreName, 'readwrite');
+            const store = tx.objectStore(ResStoreName);
             if (res.forEach) {
               res.forEach(r => {
                 if (r && r.id) {
@@ -45,9 +61,9 @@ export default class DBHelper {
    */
   static fetchRestaurants(callback) {
     const refresh = () => DBHelper.finaliseFetch(fetch(RESTAURANT_URL), callback);
-    openIdb.then(db => {
-      db.transaction(IdbName)
-        .objectStore(IdbName)
+    openResDb.then(db => {
+      db.transaction(ResStoreName)
+        .objectStore(ResStoreName)
         .getAll()
         .then(res => {
           if (res) {
@@ -65,13 +81,51 @@ export default class DBHelper {
   static fetchRestaurantById(id, callback) {
     const refresh = () => DBHelper.finaliseFetch(
       fetch(RESTAURANT_URL + `/${id}`), callback);
-    openIdb.then(db => {
-      db.transaction(IdbName)
-        .objectStore(IdbName)
+    openResDb.then(db => {
+      db.transaction(ResStoreName)
+        .objectStore(ResStoreName)
         .get(id)
         .then(res => {
           if (res) {
             callback(null, res);
+          }
+          refresh();
+        })
+        .catch(refresh);
+    }).catch(refresh);
+  }
+
+  static finaliseReviewFetch(promise, callback) {
+    promise.then(res => res.json())
+      .then(res => {
+        if (res) {
+          openResDb.then(db => {
+            const tx = db.transaction(ReviewStoreName, 'readwrite');
+            const store = tx.objectStore(ReviewStoreName);
+            if (res && res.length) {
+              let data = {
+                id: res[0].restaurant_id,
+                reviews: res
+              };
+              store.put(data);
+            }
+          });
+        }
+        callback(null, res);
+      })
+      .catch(err => callback(err, null));
+  }
+
+  static fetchReviews(id, callback) {
+    const refresh = () => DBHelper.finaliseReviewFetch(
+      fetch(REVIEW_URL + `/?restaurant_id=${id}`), callback);
+    openResDb.then(db => {
+      db.transaction(ReviewStoreName)
+        .objectStore(ReviewStoreName)
+        .get(id)
+        .then(res => {
+          if (res && res.reviews) {
+            callback(null, res.reviews);
           }
           refresh();
         })
@@ -199,7 +253,36 @@ export default class DBHelper {
   /**
    * Post a restaurant review
    */
-  static postReview(restaurantId, username, rating, comment) {
-    
+  static postReview(id, name, rating, comment) {
+    var data = {
+      restaurant_id: id,
+      name: name,
+      rating: rating,
+      comments: comment
+    };
+
+    if (_worker) {
+      _worker.postMessage({
+        action: 'postReview',
+        url: REVIEW_URL,
+        data: data,
+        method: 'POST'
+      });
+      return;
+    }
+
+    return fetch(REVIEW_URL, {
+      body: JSON.stringify(data), // must match 'Content-Type' header
+      // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      // credentials: 'same-origin', // include, same-origin, *omit
+      // headers: {
+      //   'user-agent': 'Mozilla/4.0 MDN Example',
+      //   'content-type': 'application/json'
+      // },
+      method: 'POST',
+      mode: 'cors',
+      // redirect: 'follow', // manual, *follow, error
+      // referrer: 'no-referrer', // *client, no-referrer
+    });
   }
 }

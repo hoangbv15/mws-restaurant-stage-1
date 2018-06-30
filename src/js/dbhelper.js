@@ -262,13 +262,24 @@ export default class DBHelper {
     };
 
     if (_worker) {
-      _worker.postMessage({
-        action: 'postReview',
-        url: REVIEW_URL,
-        data: data,
-        method: 'POST'
+      return new Promise((resolve, reject) => {
+        _worker.addEventListener('message', e => {
+          let msg = e.data;
+          if (msg.result === 'success') {
+            resolve(msg.data);
+          } else if (msg.result === 'error') {
+            reject(msg.message);
+          }
+        });
+
+        _worker.postMessage({
+          action: 'postReview',
+          url: REVIEW_URL,
+          data: data,
+          method: 'POST'
+        });
+
       });
-      return;
     }
 
     return fetch(REVIEW_URL, {

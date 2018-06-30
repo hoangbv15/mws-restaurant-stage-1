@@ -94,7 +94,7 @@ nav h1 a {
   width: 200px;
 	max-width: calc(100% - 20px);
 }
-.review-item {
+.review-item, .review-item-pending, .review-item-failed {
 	background-color: white;
 	border-radius: 1em;
 	padding: 0.8em;
@@ -102,6 +102,70 @@ nav h1 a {
 	display: flex;
 	flex-wrap: wrap;
 }
+.review-item-pending, .review-item-failed {
+	opacity: 0.5;
+}
+.review-item-failed {
+	border: red;
+	border-style: solid;
+}
+.review-item-failed-icon {
+	font-size: 3em;
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	width: 0;
+	color: red;
+}
+.review-item-spinner,
+.review-item-spinner:after {
+  border-radius: 50%;
+  width: 3em;
+  height: 3em;
+}
+.review-item-spinner {
+  margin: 60px auto;
+  font-size: 10px;
+  position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	opacity: 1;
+  text-indent: -9999em;
+  border-top: 1.1em solid rgba(25,25,25, 0.2);
+  border-right: 1.1em solid rgba(25,25,25, 0.2);
+  border-bottom: 1.1em solid rgba(25,25,25, 0.2);
+  border-left: 1.1em solid #191919;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
 .review-name {
 	width: 50%;
 }
@@ -117,7 +181,7 @@ nav h1 a {
 	padding: 0.1em 0.5em 0.1em 0.5em;
 }
 .review-comments {
-
+	width: 100%;
 }
 #restaurant-cuisine {
   background-color: #333;

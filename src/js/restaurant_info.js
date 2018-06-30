@@ -46,10 +46,17 @@ function submitReview() {
     name: name,
     updatedAt: new Date().getTime(),
     rating: rating,
-    comments: comment
+    comments: comment,
+    state: 'pending'
   };
 
-  DBHelper.postReview(self.restaurant.id, name, rating, comment);
+  DBHelper.postReview(self.restaurant.id, name, rating, comment).then(() => {
+    review.state = 'success';
+    fillReviewsHTML();
+  }, err => {
+    review.state = 'failed';
+    fillReviewsHTML();
+  });
 
   if (!Array.isArray(self.restaurant.reviews) || !self.restaurant.reviews.length) {
     self.restaurant.reviews = [review];
@@ -72,7 +79,7 @@ function fetchRestaurantFromURL(callback){
   }
   const id = getParameterByName('id');
   if (!id) { // no id found in URL
-    error = 'No restaurant id in URL'
+    let error = 'No restaurant id in URL';
     callback(error, null);
   } else {
     let resId = parseInt(id);
@@ -184,7 +191,24 @@ function fillReviewsHTML(reviews = self.restaurant.reviews) {
  */
 function createReviewHTML(review) {
   const li = document.createElement('li');
-  li.classList.add('review-item');
+
+  if (review.state === 'pending') {
+    li.classList.add('review-item-pending');
+    const spinner = document.createElement('p');
+    spinner.classList.add('review-item-spinner');
+    spinner.innerHTML = 'Status pending';
+    spinner.setAttribute('tabindex', '0');
+    li.appendChild(spinner);
+  } else if (review.state === 'failed'){
+    li.classList.add('review-item-failed');
+    const failIcon = document.createElement('p');
+    failIcon.classList.add('review-item-failed-icon');
+    failIcon.innerHTML = '⚠';
+    failIcon.setAttribute('tabindex', '0');
+    li.appendChild(failIcon);
+  } else {
+    li.classList.add('review-item');
+  }
 
   const name = document.createElement('p');
   name.classList.add('review-name');

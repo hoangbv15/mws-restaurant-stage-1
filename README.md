@@ -16,6 +16,8 @@ To build and immediately start a development server, run
 
 This will create a development build at `./dist` and start a webpack development server on port 8000
 
+Please note that if the images don't show up, look at your terminal for errors related to ImageShark/GraphicsShark! It's likely that your machine does not have these installed as the prerequisite of this course!
+
 To make a production build at `./dist`, run
 
 `npm run build-prod`

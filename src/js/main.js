@@ -179,6 +179,19 @@ function resetRestaurants(restaurants) {
   }
   self.markers = [];
   self.restaurants = restaurants;
+  self.restaurants.sort((a, b) => {
+    if (isFavourite(a) && !isFavourite(b)) {
+      return -1;
+    }
+    if (isFavourite(a) === isFavourite(b)) {
+      return 0;
+    }
+    return 1;
+  });
+}
+
+function isFavourite(restaurant) {
+  return restaurant.is_favorite === true || restaurant.is_favorite === 'true';
 }
 
 /**
@@ -192,6 +205,10 @@ function fillRestaurantsHTML(restaurants = self.restaurants) {
   _initMapPromise.then(addMarkersToMap);
 }
 
+function handleFavourite(e, id) {
+  DBHelper.addToFavourite(id, e.target.checked);
+}
+
 /**
  * Create restaurant HTML.
  */
@@ -203,6 +220,22 @@ function createRestaurantHTML(restaurant) {
   name.className = 'restaurant-name';
   name.setAttribute('tabindex', '0');
   li.append(name);
+
+  const favourite = document.createElement('input');
+  favourite.className = 'restaurant-favourite';
+  favourite.setAttribute('type', 'checkbox');
+  favourite.setAttribute('id', 'restaurant-' + restaurant.id);
+  favourite.onchange = e => handleFavourite(e, restaurant.id);
+  if (isFavourite(restaurant)) {
+    favourite.setAttribute('checked', true);
+  }
+  li.append(favourite);
+  const favouriteLabel = document.createElement('label');
+  favouriteLabel.innerHTML = 'favourite';
+  favouriteLabel.setAttribute('for', 'restaurant-' + restaurant.id);
+  favouriteLabel.setAttribute('tabindex', '0');
+  favouriteLabel.className = 'restaurant-favourite-label';
+  li.append(favouriteLabel);
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';

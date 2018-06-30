@@ -11,8 +11,7 @@ function retryingFetch(req, retry) {
     mode: 'cors'
   }).then(res => {
     postMessage({
-      result: 'success',
-      data: res.json()
+      result: 'success'
     });
   }, e => {
     // Retry every 5 seconds

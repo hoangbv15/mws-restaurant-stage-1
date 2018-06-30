@@ -116,12 +116,22 @@ function fetchRestaurantFromURL(callback){
   }
 }
 
+function handleFavourite(e, id) {
+  DBHelper.addToFavourite(id, e.target.checked);
+}
+
 /**
  * Create restaurant HTML and add it to the webpage
  */
 function fillRestaurantHTML(restaurant = self.restaurant){
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
+
+  const favourite = document.getElementById('restaurant-favourite');
+  favourite.onchange = e => handleFavourite(e, restaurant.id);
+  if (restaurant.is_favorite === true || restaurant.is_favorite === 'true') {
+    favourite.setAttribute('checked', true);
+  }
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;

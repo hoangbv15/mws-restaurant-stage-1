@@ -10,7 +10,7 @@ const openResDb = idb.open('udacity-restaurant-store', 1, db => {
 const PORT = 1337;
 const BACKEND_URL = `http://localhost:${PORT}`;
 const RESTAURANT_URL = `${BACKEND_URL}/restaurants`;
-const REVIEW_URL = `${BACKEND_URL}/reviews`
+const REVIEW_URL = `${BACKEND_URL}/reviews`;
 
 let _worker;
 
@@ -271,14 +271,12 @@ export default class DBHelper {
             reject(msg.message);
           }
         });
-
         _worker.postMessage({
           action: 'postReview',
           url: REVIEW_URL,
           data: data,
           method: 'POST'
         });
-
       });
     }
 
@@ -294,6 +292,32 @@ export default class DBHelper {
       mode: 'cors',
       // redirect: 'follow', // manual, *follow, error
       // referrer: 'no-referrer', // *client, no-referrer
+    });
+  }
+
+  static addToFavourite(id, isFavourite) {
+    var url = `${RESTAURANT_URL}/${id}/?is_favorite=${isFavourite}`;
+    if (_worker) {
+      return new Promise((resolve, reject) => {
+        _worker.addEventListener('message', e => {
+          let msg = e.data;
+          if (msg.result === 'success') {
+            resolve(msg.data);
+          } else if (msg.result === 'error') {
+            reject(msg.message);
+          }
+        });
+        _worker.postMessage({
+          action: 'favourite',
+          url: url,
+          method: 'PUT'
+        });
+      });
+    }
+
+    return fetch(url, {
+      method: 'PUT',
+      mode: 'cors'
     });
   }
 }

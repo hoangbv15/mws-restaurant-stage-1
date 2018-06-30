@@ -5,5 +5,14 @@
     "display": "standalone",
     "background_color": "#252831",
     "theme_color": "#252831",
-    "description": "A simply readable Restaurants Review app."
+    "description": "A simply readable Restaurants Review app.",
+    "icons": [{
+        "src": "icons/hippo-128.png",
+        "sizes": "192x192",
+        "type": "image/png"
+    }, {
+        "src": "icons/hippo-512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+    }]
 }

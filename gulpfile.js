@@ -52,6 +52,11 @@ gulp.task('webpack-prod', ['clean'], function(){
     .pipe(gulp.dest(paths.dist));
 });
 
+gulp.task('icons', ['clean'], function(){
+  return gulp.src(`${src}/icon/*.*`)
+    .pipe(gulp.dest(paths.dist));
+});
+
 gulp.task('watch', function() {
   gulp.watch(paths.html, ['html']);
   gulp.watch(paths.css, ['css']);
@@ -59,6 +64,6 @@ gulp.task('watch', function() {
   gulp.watch(paths.js, ['webpack']);
 });
 
-gulp.task('default', [ 'html', 'css', 'workers', 'manifest', 'webpack' ]);
+gulp.task('default', [ 'html', 'css', 'icons', 'workers', 'manifest', 'webpack' ]);
 
-gulp.task('build-prod', [ 'html', 'css', 'workers', 'manifest', 'webpack-prod' ]);
+gulp.task('build-prod', [ 'html', 'css', 'icons', 'workers', 'manifest', 'webpack-prod' ]);
